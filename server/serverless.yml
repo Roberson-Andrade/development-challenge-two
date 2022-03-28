@@ -54,7 +54,7 @@ functions:
     handler: endpoints/delete.delete
     events:
       - http: 
-          path: patients
+          path: patients/{id}
           method: delete
   
 resources:
