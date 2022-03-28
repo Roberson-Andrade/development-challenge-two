@@ -1,9 +1,15 @@
 const AWS = require('aws-sdk');
+const allowFields = require('../utils/allowFields');
 const response = require('../utils/response');
 const dynamoDB = new AWS.DynamoDB.DocumentClient;
 
 module.exports.update = async (event) => {
   const body = JSON.parse(event.body);
+
+  const allowedFields = ['patientName', 'email', 'birthDay', 'address'];
+  if(!allowFields(allowedFields, body)) {
+    return response({ error: 'Insert only valid fields' }, 400);
+  }
 
   let updateExpression = 'set ';
   let expressionAttributeValues = {};
