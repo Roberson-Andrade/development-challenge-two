@@ -1,15 +1,19 @@
-'use strict';
+const AWS = require('aws-sdk');
+const response = require('../utils/response');
+const dynamoDB = new AWS.DynamoDB.DocumentClient;
 
 module.exports.delete = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
+  const params = {
+    TableName: 'PatientTable',
+    Key: {
+      id: event.pathParameters.id
+    },
   };
+
+  try {
+    await dynamoDB.delete(params).promise();
+    return response({ message: 'Patient deleted successfully' }, 200)
+  } catch (error) {
+    return response(error, 500);
+  }
 };

@@ -1,15 +1,33 @@
-'use strict';
+const AWS = require('aws-sdk');
+const validator = require('validator');
+const response = require('../utils/response');
+const dynamoDB = new AWS.DynamoDB.DocumentClient;
+const { v4: uuidv4 } = require('uuid');
 
 module.exports.add = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+  const { patientName, birthDay, email, address } = JSON.parse(event.body);
+
+  if (!validator.default.isEmail(email)) {
+    return response({ error: 'Invalid email' }, 400)
+  } else if (!validator.default.isDate(birthDay)) {
+    return response({ error: 'Invalid date' }, 400)
+  }
+
+  const params = {
+    TableName: 'PatientTable',
+    Item: {
+      id: uuidv4(),
+      patientName,
+      email,
+      address,
+      birthDay
+    }
+  }
+
+  try {
+    await dynamoDB.put(params).promise();
+    return response({ message: 'Patient registry record created!' }, 201)
+  } catch (error) {
+    return response(error, 500)
+  }
 };
