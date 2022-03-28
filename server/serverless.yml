@@ -1,0 +1,74 @@
+service: server
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: sa-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    TABLE_NAME: PatientTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/PatientsDynamoTable'
+        - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:provider.environment.TABLE_NAME}'
+
+functions:
+  add:
+    handler: endpoints/add.add
+    events:
+      - http: 
+          path: patients
+          method: post
+  list:
+    handler: endpoints/list.list
+    events:
+      - http:
+          path: patients
+          method: get
+  getOne:
+    handler: endpoints/getOne.getOne
+    events:
+      - http:
+          path: patients/{id}
+          method: get
+  patch:
+    handler: endpoints/update.update
+    events:
+      - http:
+          path: patients/{id}
+          method: patch
+
+  delete:
+    handler: endpoints/delete.delete
+    events:
+      - http: 
+          path: patients
+          method: delete
+  
+resources:
+  Resources:
+    PatientsDynamoTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        TableName: PatientTable
+plugins:
+  - serverless-offline
