@@ -7,9 +7,11 @@ const { v4: uuidv4 } = require('uuid');
 module.exports.add = async (event) => {
   const { patientName, birthDay, email, address } = JSON.parse(event.body);
 
+  const actualDate = new Date().getTime()
+
   if (!validator.default.isEmail(email)) {
     return response({ error: 'Invalid email' }, 400)
-  } else if (!validator.default.isDate(birthDay)) {
+  } else if (!validator.default.isDate(birthDay) || actualDate < new Date(birthDay).getTime()) {
     return response({ error: 'Invalid date' }, 400)
   }
 
