@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Checkbox,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -12,6 +13,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { usePatientTableStyles } from './usePatientTableStyles';
+import { Delete, Edit } from '@material-ui/icons';
 
 const dummyRows = [
   {
@@ -67,22 +69,30 @@ function PatientTable() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.checkbox}><Checkbox /></TableCell>
               <TableCell>Nome</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Endereço</TableCell>
               <TableCell >Data de Nascimento</TableCell>
+              <TableCell align='center'>Ações</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {dummyRows.map(row => (
               <TableRow hover>
-                <TableCell className={classes.checkbox}><Checkbox /></TableCell>
                 <TableCell>{row.patientName}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.address}</TableCell>
                 <TableCell>{row.birthDay}</TableCell>
+                <TableCell>
+                  <IconButton color='warning' size='small'>
+                      <Edit />
+                  </IconButton>    
+
+                  <IconButton color='secondary' size='small'>
+                    <Delete />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

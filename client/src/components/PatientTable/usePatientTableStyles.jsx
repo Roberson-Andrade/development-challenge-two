@@ -7,9 +7,6 @@ export const usePatientTableStyles = makeStyles({
     maxWidth: '800px',
     margin: '0 auto'
   },
-  table: {
-    padding: '0 .8rem'
-  },
   checkbox: {
     padding: '0px'
   }
