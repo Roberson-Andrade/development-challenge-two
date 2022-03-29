@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Checkbox,
   IconButton,
   Paper,
   Table,
@@ -14,48 +13,11 @@ import {
 } from '@material-ui/core';
 import { usePatientTableStyles } from './usePatientTableStyles';
 import { Delete, Edit } from '@material-ui/icons';
-
-const dummyRows = [
-  {
-    patientName: 'Sergio',
-    email: 'Sergio@hotmail.com',
-    address: 'Rua bonifacio vilela',
-    birthDay: '1988/05/02'
-  },
-  {
-    patientName: 'Larua',
-    email: 'Larua@hotmail.com',
-    address: 'Rua vilela',
-    birthDay: '1958/05/02'
-  },
-  {
-    patientName: 'Felipe',
-    email: 'Felipe@hotmail.com',
-    address: 'Rua bonifacio',
-    birthDay: '1988/08/10'
-  },
-  {
-    patientName: 'Wadler',
-    email: 'wadler@hotmail.com',
-    address: 'Rua santos',
-    birthDay: '1990/08/25'
-  },
-  {
-    patientName: 'Caren',
-    email: 'caren@hotmail.com',
-    address: 'Rua marechal',
-    birthDay: '2000/05/02'
-  },
-  {
-    patientName: 'Fabio',
-    email: 'fabio@hotmail.com',
-    address: 'Rua fabiano freitas',
-    birthDay: '1944/09/22'
-  },
-]
+import { useSelector } from 'react-redux';
 
 function PatientTable() {
   const classes = usePatientTableStyles();
+  const patientRows = useSelector(state => state.patient.patientItems)
 
   return (
     <Paper className={classes.paper}>
@@ -73,19 +35,19 @@ function PatientTable() {
               <TableCell>Email</TableCell>
               <TableCell>Endereço</TableCell>
               <TableCell >Data de Nascimento</TableCell>
-              <TableCell align='center'>Ações</TableCell>
+              <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {dummyRows.map(row => (
+            {patientRows.map(row => (
               <TableRow hover>
                 <TableCell>{row.patientName}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.address}</TableCell>
                 <TableCell>{row.birthDay}</TableCell>
                 <TableCell>
-                  <IconButton color='warning' size='small'>
+                  <IconButton size='small'>
                       <Edit />
                   </IconButton>    
 
