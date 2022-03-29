@@ -12,8 +12,8 @@ module.exports.delete = async (event) => {
 
   try {
     await dynamoDB.delete(params).promise();
-    return response({ message: 'Patient deleted successfully' }, 200)
+    return response({ message: 'Patient deleted successfully' }, 200);
   } catch (error) {
     return response(error, 500);
-  }
+  };
 };

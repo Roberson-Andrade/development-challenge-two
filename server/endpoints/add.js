@@ -7,13 +7,13 @@ const { v4: uuidv4 } = require('uuid');
 module.exports.add = async (event) => {
   const { patientName, birthDay, email, address } = JSON.parse(event.body);
 
-  const actualDate = new Date().getTime()
+  const actualDate = new Date().getTime();
 
   if (!validator.default.isEmail(email)) {
-    return response({ error: 'Invalid email' }, 400)
+    return response({ error: 'Invalid email' }, 400);
   } else if (!validator.default.isDate(birthDay) || actualDate < new Date(birthDay).getTime()) {
-    return response({ error: 'Invalid date' }, 400)
-  }
+    return response({ error: 'Invalid date' }, 400);
+  };
 
   const params = {
     TableName: 'PatientTable',
@@ -24,12 +24,12 @@ module.exports.add = async (event) => {
       address,
       birthDay
     }
-  }
+  };
 
   try {
     await dynamoDB.put(params).promise();
-    return response({ message: 'Patient registry record created!' }, 201)
+    return response({ message: 'Patient registry record created!' }, 201);
   } catch (error) {
-    return response(error, 500)
-  }
+    return response(error, 500);
+  };
 };

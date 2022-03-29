@@ -9,7 +9,7 @@ module.exports.update = async (event) => {
   const allowedFields = ['patientName', 'email', 'birthDay', 'address'];
   if(!allowFields(allowedFields, body)) {
     return response({ error: 'Insert only valid fields' }, 400);
-  }
+  };
 
   let updateExpression = 'set ';
   let expressionAttributeValues = {};
@@ -17,7 +17,7 @@ module.exports.update = async (event) => {
   for(const field in body) {
     updateExpression += ` ${field} = :${field}`;
     expressionAttributeValues[':' + field] = body[field];
-  }
+  };
 
   const params = {
     TableName: 'PatientTable',
@@ -33,5 +33,5 @@ module.exports.update = async (event) => {
     return response({ message: 'Patient updated successfully' }, 200);
   } catch (error) {
     return response(error, 500);
-  }
+  };
 };

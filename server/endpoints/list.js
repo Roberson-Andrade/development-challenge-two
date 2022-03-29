@@ -5,7 +5,7 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient;
 module.exports.list = async (event) => {
   const params = {
     TableName: 'PatientTable',
-  }
+  };
 
   try {
     const patients = await dynamoDB.scan(params).promise();

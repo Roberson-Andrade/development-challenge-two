@@ -17,5 +17,5 @@ module.exports.getOne = async (event) => {
     return response(patient, 200);
   } catch (error) {
     return response(error, 500);
-  }
+  };
 };
