@@ -13,12 +13,18 @@ import {
 } from '@material-ui/core';
 import { usePatientTableStyles } from './usePatientTableStyles';
 import { Delete, Edit } from '@material-ui/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { patientsActions } from '../../store/patientSlice';
 
 function PatientTable() {
   const classes = usePatientTableStyles();
   const patientRows = useSelector(state => state.patient.patientItems)
+  const dispatch  = useDispatch();
 
+  const removePatientHandler = (event) => {
+    console.log(event.target.value)
+    
+  }
   return (
     <Paper className={classes.paper}>
       <Toolbar>
@@ -41,7 +47,7 @@ function PatientTable() {
 
           <TableBody>
             {patientRows.map(row => (
-              <TableRow hover>
+              <TableRow hover key={row.id}>
                 <TableCell>{row.patientName}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.address}</TableCell>
@@ -51,8 +57,8 @@ function PatientTable() {
                       <Edit />
                   </IconButton>    
 
-                  <IconButton color='secondary' size='small'>
-                    <Delete />
+                  <IconButton onClick={() => { dispatch(patientsActions.removePatient({ id: row.id })) } } color='secondary' size='small'>
+                    <Delete/>
                   </IconButton>
                 </TableCell>
               </TableRow>
