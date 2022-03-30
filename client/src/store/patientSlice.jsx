@@ -45,7 +45,6 @@ const initialState = {
       birthDay: '1944-09-22'
     },
   ],
-  isAdd: true,
   patientToEdit: {
     id: '',
     patientName: '',
@@ -79,13 +78,6 @@ export const patientSlice = createSlice({
 
       state.patientItems[indexPatient] = action.payload
     },
-    setEditPatient(state, action) {
-      state.isAdd = false
-      state.patientToEdit = action.payload
-    },
-    setIsAddTrue(state) {
-      state.isAdd = true
-    }
   }
 
 })

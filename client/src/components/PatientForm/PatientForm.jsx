@@ -17,19 +17,18 @@ function PatientForm(props) {
   const classes = usePatientFormStyles();
   const dispatch = useDispatch();
 
-  const isAdd = useSelector(state => state.patient.isAdd);
   const {
     id,
-    patientName: editedPatientName,
-    email: editedEmail,
-    address: editedAddress,
-    birthDay: editedbirthDay
-  } = useSelector(state => state.patient.patientToEdit);
+    defaultPatientName,
+    defaultEmail,
+    defaultAddress,
+    defaultBirthDay,
+  } = props.defaultValues;
 
-  const nameInput = useInput(value => value !== '');
-  const emailInput = useInput(value => value.includes('@'));
-  const addressInput = useInput(value => value.length > 4);
-  const dateInput = useInput(value => value !== '');
+  const nameInput = useInput(value => value !== '', defaultPatientName);
+  const emailInput = useInput(value => value.includes('@'), defaultEmail);
+  const addressInput = useInput(value => value.length > 4, defaultAddress);
+  const dateInput = useInput(value => value !== '', defaultBirthDay);
 
   const resetAllInputs = () => {
     nameInput.reset();
@@ -40,13 +39,14 @@ function PatientForm(props) {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if(!isAdd) {
+
+    if(defaultPatientName) {
       dispatch(patientsActions.editPatient({
         id,
-        patientName: nameInput.value || editedPatientName,
-        email: emailInput.value || editedEmail,
-        address: addressInput.value || editedAddress,
-        birthDay: dateInput.value || editedbirthDay
+        patientName: nameInput.value || defaultPatientName,
+        email: emailInput.value || defaultEmail,
+        address: addressInput.value || defaultAddress,
+        birthDay: dateInput.value || defaultBirthDay
       }));
       resetAllInputs()
       props.showFormHandler()
@@ -60,6 +60,7 @@ function PatientForm(props) {
       birthDay: dateInput.value
     }))
     resetAllInputs()
+    props.showFormHandler()
   };
   
   return (
@@ -83,8 +84,8 @@ function PatientForm(props) {
           label = 'Nome do Paciente'
           onChange = {nameInput.enterValueHandler}
           onBlur = {nameInput.blurHandler}
-          value={isAdd ? nameInput.value : undefined}
-          defaultValue={!isAdd ? editedPatientName : undefined}
+          value={!defaultPatientName ? nameInput.value : undefined}
+          defaultValue={defaultPatientName ? defaultPatientName : undefined}
           error={nameInput.hasError}
           helperText={nameInput.hasError && 'Campo obrigatório'}
         />
@@ -96,8 +97,8 @@ function PatientForm(props) {
           label = 'Email' 
           onChange={emailInput.enterValueHandler}
           onBlur = {emailInput.blurHandler}
-          value={isAdd ? emailInput.value : undefined}
-          defaultValue={!isAdd ? editedEmail : undefined}
+          value={!defaultPatientName ? emailInput.value : undefined}
+          defaultValue={defaultPatientName ? defaultEmail : undefined}
           error={emailInput.hasError}
           helperText={emailInput.hasError && 'Email inválido'}
         />
@@ -109,8 +110,8 @@ function PatientForm(props) {
           label='Endereço' 
           onChange={addressInput.enterValueHandler}
           onBlur = {addressInput.blurHandler}
-          value={isAdd ? addressInput.value : undefined}
-          defaultValue={!isAdd ? editedAddress : undefined}
+          value={!defaultPatientName ? addressInput.value : undefined}
+          defaultValue={defaultPatientName ? defaultAddress : undefined}
           error={addressInput.hasError}
           helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
         />
@@ -123,12 +124,12 @@ function PatientForm(props) {
           InputLabelProps={{ shrink: true }}
           onChange={dateInput.enterValueHandler}
           onBlur = {dateInput.blurHandler}
-          value={isAdd ? dateInput.value : undefined}
-          defaultValue={!isAdd ? editedbirthDay : undefined}
+          value={!defaultPatientName ? dateInput.value : undefined}
+          defaultValue={defaultPatientName ? defaultBirthDay : undefined}
           error={dateInput.hasError}
           helperText={dateInput.hasError && 'Data inválida'}
         />
-        {isAdd ? <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button> : <Button type='submit' variant='contained' color='primary'>Editar Paciente</Button>}
+        {!defaultPatientName ? <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button> : <Button type='submit' variant='contained' color='primary'>Editar Paciente</Button>}
       </Box>
     </Dialog>
   )

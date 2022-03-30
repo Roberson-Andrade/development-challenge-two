@@ -23,7 +23,7 @@ function PatientTable(props) {
 
   
   const showFormHandler = () => {
-    dispatch(patientsActions.setIsAddTrue())
+    props.setEditValues({})
     props.showFormHandler()
   }
 
@@ -62,14 +62,14 @@ function PatientTable(props) {
                     size='small' 
                     color='primary' 
                     onClick={() => { 
-                      dispatch(patientsActions.setEditPatient({ 
+                      props.setEditValues({ 
                         id: row.id,
-                        patientName: row.patientName,
-                        email: row.email,
-                        address: row.address,
-                        birthDay: row.birthDay
-                      }))
-                      props.showFormHandler()
+                        defaultPatientName: row.patientName,
+                        defaultEmail: row.email,
+                        defaultAddress: row.address,
+                        defaultBirthDay: row.birthDay
+                      })
+                      props.showFormHandler();
                     }}
                   >
                       <Edit />
