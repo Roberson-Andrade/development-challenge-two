@@ -46,7 +46,13 @@ const initialState = {
     },
   ],
   isAdd: true,
-  patientToEdit: {}
+  patientToEdit: {
+    id: '',
+    patientName: '',
+    email: '',
+    address: '',
+    birthDay: ''
+  }
 }
 
 export const patientSlice = createSlice({

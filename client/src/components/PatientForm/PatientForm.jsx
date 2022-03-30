@@ -18,29 +18,37 @@ function PatientForm(props) {
   const dispatch = useDispatch();
 
   const isAdd = useSelector(state => state.patient.isAdd);
-  const patientToEdit = useSelector(state => state.patient.patientToEdit);
+  const {
+    id,
+    patientName: editedPatientName,
+    email: editedEmail,
+    address: editedAddress,
+    birthDay: editedbirthDay
+  } = useSelector(state => state.patient.patientToEdit);
 
   const nameInput = useInput(value => value !== '');
   const emailInput = useInput(value => value.includes('@'));
   const addressInput = useInput(value => value.length > 4);
   const dateInput = useInput(value => value !== '');
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-
+  const resetAllInputs = () => {
     nameInput.reset();
     emailInput.reset();
     addressInput.reset();
     dateInput.reset();
+  }
 
+  const submitHandler = (event) => {
+    event.preventDefault();
     if(!isAdd) {
       dispatch(patientsActions.editPatient({
-        id: patientToEdit.id,
-        patientName: nameInput.value || patientToEdit.patientName,
-        email: emailInput.value || patientToEdit.email,
-        address: addressInput.value || patientToEdit.address,
-        birthDay: dateInput.value || patientToEdit.birthDay
+        id,
+        patientName: nameInput.value || editedPatientName,
+        email: emailInput.value || editedEmail,
+        address: addressInput.value || editedAddress,
+        birthDay: dateInput.value || editedbirthDay
       }));
+      resetAllInputs()
       props.showFormHandler()
       return;
     }
@@ -51,11 +59,20 @@ function PatientForm(props) {
       address: addressInput.value,
       birthDay: dateInput.value
     }))
+    resetAllInputs()
   };
+  
   return (
     <Dialog open={props.showForm} onClose={props.showFormHandler} fullWidth>
       <Box component='form' className={classes.root} onSubmit={submitHandler}>
-        <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={props.showFormHandler}>
+        <IconButton 
+        className={classes.closeBtn} 
+        aria-label="delete" 
+        color='primary' 
+        onClick={() => {
+          props.showFormHandler();
+          resetAllInputs();
+        }}>
           <CloseOutlined/>
         </IconButton>
 
@@ -67,7 +84,7 @@ function PatientForm(props) {
           onChange = {nameInput.enterValueHandler}
           onBlur = {nameInput.blurHandler}
           value={isAdd ? nameInput.value : undefined}
-          defaultValue={!isAdd ? patientToEdit.patientName : undefined}
+          defaultValue={!isAdd ? editedPatientName : undefined}
           error={nameInput.hasError}
           helperText={nameInput.hasError && 'Campo obrigatório'}
         />
@@ -80,7 +97,7 @@ function PatientForm(props) {
           onChange={emailInput.enterValueHandler}
           onBlur = {emailInput.blurHandler}
           value={isAdd ? emailInput.value : undefined}
-          defaultValue={!isAdd ? patientToEdit.email : undefined}
+          defaultValue={!isAdd ? editedEmail : undefined}
           error={emailInput.hasError}
           helperText={emailInput.hasError && 'Email inválido'}
         />
@@ -93,7 +110,7 @@ function PatientForm(props) {
           onChange={addressInput.enterValueHandler}
           onBlur = {addressInput.blurHandler}
           value={isAdd ? addressInput.value : undefined}
-          defaultValue={!isAdd ? patientToEdit.address : undefined}
+          defaultValue={!isAdd ? editedAddress : undefined}
           error={addressInput.hasError}
           helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
         />
@@ -107,7 +124,7 @@ function PatientForm(props) {
           onChange={dateInput.enterValueHandler}
           onBlur = {dateInput.blurHandler}
           value={isAdd ? dateInput.value : undefined}
-          defaultValue={!isAdd ? patientToEdit.birthDay : undefined}
+          defaultValue={!isAdd ? editedbirthDay : undefined}
           error={dateInput.hasError}
           helperText={dateInput.hasError && 'Data inválida'}
         />
