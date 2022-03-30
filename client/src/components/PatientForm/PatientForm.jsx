@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Button,
@@ -16,22 +16,38 @@ import { patientsActions } from '../../store/patientSlice';
 function PatientForm(props) {
   const classes = usePatientFormStyles();
   const dispatch = useDispatch();
+  const isAdd = useSelector(state => state.patient.isAdd);
+  const patientToEdit = useSelector(state => state.patient.patientToEdit);
 
   const nameInput = useInput(value => value !== '');
   const emailInput = useInput(value => value.includes('@'));
   const addressInput = useInput(value => value.length > 4);
   const dateInput = useInput(value => value !== '');
 
+  const showFormHandler = () => {
+    dispatch(patientsActions.setIsAddTrue)
+    props.showFormHandler()
+  }
+
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(nameInput.value);
-    console.log(emailInput.value);
-    console.log(addressInput.value);
-    console.log(dateInput.value);
+
     nameInput.reset();
     emailInput.reset();
     addressInput.reset();
     dateInput.reset();
+
+    if(!isAdd) {
+      dispatch(patientsActions.editPatient({
+        id: patientToEdit.id,
+        patientName: nameInput.value || patientToEdit.patientName,
+        email: emailInput.value || patientToEdit.email,
+        address: addressInput.value || patientToEdit.address,
+        birthDay: dateInput.value || patientToEdit.birthDay
+      }));
+      props.showFormHandler()
+      return;
+    }
 
     dispatch(patientsActions.addPatient({
       patientName: nameInput.value,
@@ -43,7 +59,7 @@ function PatientForm(props) {
   return (
     <Dialog open={props.showForm} onClose={props.showFormHandler} fullWidth>
       <Box component='form' className={classes.root} onSubmit={submitHandler}>
-        <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={props.showFormHandler}>
+        <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={showFormHandler}>
           <CloseOutlined/>
         </IconButton>
 
@@ -54,7 +70,8 @@ function PatientForm(props) {
           label = 'Nome do Paciente'
           onChange = {nameInput.enterValueHandler}
           onBlur = {nameInput.blurHandler}
-          value={nameInput.value}
+          value={isAdd ? nameInput.value : undefined}
+          defaultValue={!isAdd && patientToEdit.patientName}
           error={nameInput.hasError}
           helperText={nameInput.hasError && 'Campo obrigatório'}
         />
@@ -66,7 +83,8 @@ function PatientForm(props) {
           label = 'Email' 
           onChange={emailInput.enterValueHandler}
           onBlur = {emailInput.blurHandler}
-          value={emailInput.value}
+          value={isAdd ? emailInput.value : undefined}
+          defaultValue={!isAdd && patientToEdit.email}
           error={emailInput.hasError}
           helperText={emailInput.hasError && 'Email inválido'}
         />
@@ -78,7 +96,8 @@ function PatientForm(props) {
           label='Endereço' 
           onChange={addressInput.enterValueHandler}
           onBlur = {addressInput.blurHandler}
-          value={addressInput.value}
+          value={isAdd ? addressInput.value : undefined}
+          defaultValue={!isAdd && patientToEdit.address}
           error={addressInput.hasError}
           helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
         />
@@ -91,11 +110,12 @@ function PatientForm(props) {
           InputLabelProps={{ shrink: true }}
           onChange={dateInput.enterValueHandler}
           onBlur = {dateInput.blurHandler}
-          value={dateInput.value}
+          value={isAdd ? dateInput.value : undefined}
+          defaultValue={!isAdd && patientToEdit.birthDay}
           error={dateInput.hasError}
           helperText={dateInput.hasError && 'Data inválida'}
         />
-        <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button>
+        {isAdd ? <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button> : <Button type='submit' variant='contained' color='primary'>Editar Paciente</Button>}
       </Box>
     </Dialog>
   )

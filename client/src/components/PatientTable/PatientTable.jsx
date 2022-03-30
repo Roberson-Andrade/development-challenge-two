@@ -52,7 +52,20 @@ function PatientTable(props) {
                 <TableCell>{row.address}</TableCell>
                 <TableCell>{row.birthDay}</TableCell>
                 <TableCell>
-                  <IconButton size='small'>
+                  <IconButton 
+                    size='small' 
+                    color='primary' 
+                    onClick={() => { 
+                      dispatch(patientsActions.setEditPatient({ 
+                        id: row.id,
+                        patientName: row.patientName,
+                        email: row.email,
+                        address: row.address,
+                        birthDay: row.birthDay
+                      }))
+                      props.showFormHandler()
+                    }}
+                  >
                       <Edit />
                   </IconButton>    
 
