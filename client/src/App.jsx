@@ -12,9 +12,8 @@ function App() {
   const classes = useAppStyles(); 
   return (
     <Container maxWidth='xl'>
-      <Slide in={!showForm} unmountOnExit><Box className={classes.btn}><Button onClick={showFormHandler} variant='contained' color='primary' size='large'>Adicionar um novo paciente</Button></Box></Slide>  
-      <Zoom in={showForm} unmountOnExit><PatientForm showForm={showFormHandler}/></Zoom>
-      <PatientTable/>
+      <PatientForm showFormHandler={showFormHandler} showForm={showForm}/>
+      <PatientTable showFormHandler={showFormHandler}/>
     </Container>
   );
 };

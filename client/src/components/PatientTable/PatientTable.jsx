@@ -12,25 +12,24 @@ import {
   Typography
 } from '@material-ui/core';
 import { usePatientTableStyles } from './usePatientTableStyles';
-import { Delete, Edit } from '@material-ui/icons';
+import { Delete, Edit, PersonAdd } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { patientsActions } from '../../store/patientSlice';
 
-function PatientTable() {
+function PatientTable(props) {
   const classes = usePatientTableStyles();
   const patientRows = useSelector(state => state.patient.patientItems)
   const dispatch  = useDispatch();
 
-  const removePatientHandler = (event) => {
-    console.log(event.target.value)
-    
-  }
   return (
     <Paper className={classes.paper}>
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <Typography variant='h5'>
           Pacientes
         </Typography>
+        <IconButton onClick={props.showFormHandler} variant='contained' color='primary'>
+            <PersonAdd/>
+        </IconButton>
       </Toolbar>
 
       <TableContainer className={classes.table}>
@@ -46,7 +45,7 @@ function PatientTable() {
           </TableHead>
 
           <TableBody>
-            {patientRows.map(row => (
+            {patientRows.length !== 0 ? patientRows.map(row => (
               <TableRow hover key={row.id}>
                 <TableCell>{row.patientName}</TableCell>
                 <TableCell>{row.email}</TableCell>
@@ -62,7 +61,7 @@ function PatientTable() {
                   </IconButton>
                 </TableCell>
               </TableRow>
-            ))}
+            )) : <TableRow><TableCell className={classes.notFoundMsg} variant='footer' colSpan={5}>Nenhum paciente registrado</TableCell></TableRow>}
           </TableBody>
         </Table>
       </TableContainer>

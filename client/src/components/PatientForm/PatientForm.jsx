@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import {
   Box,
   Button,
+  Dialog,
   IconButton,
   TextField
 } from '@material-ui/core';
@@ -40,61 +41,63 @@ function PatientForm(props) {
     }))
   };
   return (
-    <Box component='form' className={classes.root} {...props} onSubmit={submitHandler}>
-      <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={props.showForm}>
-        <CloseOutlined/>
-      </IconButton>
+    <Dialog open={props.showForm} onClose={props.showFormHandler} fullWidth>
+      <Box component='form' className={classes.root} onSubmit={submitHandler}>
+        <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={props.showFormHandler}>
+          <CloseOutlined/>
+        </IconButton>
 
-      <TextField 
-        required 
-        type = 'text'
-        id = 'patientName'
-        label = 'Nome do Paciente'
-        onChange = {nameInput.enterValueHandler}
-        onBlur = {nameInput.blurHandler}
-        value={nameInput.value}
-        error={nameInput.hasError}
-        helperText={nameInput.hasError && 'Campo obrigatório'}
-      />
+        <TextField 
+          required 
+          type = 'text'
+          id = 'patientName'
+          label = 'Nome do Paciente'
+          onChange = {nameInput.enterValueHandler}
+          onBlur = {nameInput.blurHandler}
+          value={nameInput.value}
+          error={nameInput.hasError}
+          helperText={nameInput.hasError && 'Campo obrigatório'}
+        />
 
-      <TextField 
-        required 
-        type = 'email'
-        id = 'email'
-        label = 'Email' 
-        onChange={emailInput.enterValueHandler}
-        onBlur = {emailInput.blurHandler}
-        value={emailInput.value}
-        error={emailInput.hasError}
-        helperText={emailInput.hasError && 'Email inválido'}
-      />
+        <TextField 
+          required 
+          type = 'email'
+          id = 'email'
+          label = 'Email' 
+          onChange={emailInput.enterValueHandler}
+          onBlur = {emailInput.blurHandler}
+          value={emailInput.value}
+          error={emailInput.hasError}
+          helperText={emailInput.hasError && 'Email inválido'}
+        />
 
-      <TextField 
-        required 
-        type='text' 
-        id='address' 
-        label='Endereço' 
-        onChange={addressInput.enterValueHandler}
-        onBlur = {addressInput.blurHandler}
-        value={addressInput.value}
-        error={addressInput.hasError}
-        helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
-      />
+        <TextField 
+          required 
+          type='text' 
+          id='address' 
+          label='Endereço' 
+          onChange={addressInput.enterValueHandler}
+          onBlur = {addressInput.blurHandler}
+          value={addressInput.value}
+          error={addressInput.hasError}
+          helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
+        />
 
-      <TextField 
-        required 
-        type='date' 
-        id='date' 
-        label='Data de Nascimento' 
-        InputLabelProps={{ shrink: true }}
-        onChange={dateInput.enterValueHandler}
-        onBlur = {dateInput.blurHandler}
-        value={dateInput.value}
-        error={dateInput.hasError}
-        helperText={dateInput.hasError && 'Data inválida'}
-      />
-      <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button>
-    </Box>
+        <TextField 
+          required 
+          type='date' 
+          id='date' 
+          label='Data de Nascimento' 
+          InputLabelProps={{ shrink: true }}
+          onChange={dateInput.enterValueHandler}
+          onBlur = {dateInput.blurHandler}
+          value={dateInput.value}
+          error={dateInput.hasError}
+          helperText={dateInput.hasError && 'Data inválida'}
+        />
+        <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button>
+      </Box>
+    </Dialog>
   )
 }
 
