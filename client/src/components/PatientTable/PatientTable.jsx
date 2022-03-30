@@ -21,13 +21,19 @@ function PatientTable(props) {
   const patientRows = useSelector(state => state.patient.patientItems)
   const dispatch  = useDispatch();
 
+  
+  const showFormHandler = () => {
+    dispatch(patientsActions.setIsAddTrue())
+    props.showFormHandler()
+  }
+
   return (
     <Paper className={classes.paper}>
       <Toolbar className={classes.toolbar}>
         <Typography variant='h5'>
           Pacientes
         </Typography>
-        <IconButton onClick={props.showFormHandler} variant='contained' color='primary'>
+        <IconButton onClick={showFormHandler} variant='contained' color='primary'>
             <PersonAdd/>
         </IconButton>
       </Toolbar>

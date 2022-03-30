@@ -16,6 +16,7 @@ import { patientsActions } from '../../store/patientSlice';
 function PatientForm(props) {
   const classes = usePatientFormStyles();
   const dispatch = useDispatch();
+
   const isAdd = useSelector(state => state.patient.isAdd);
   const patientToEdit = useSelector(state => state.patient.patientToEdit);
 
@@ -23,11 +24,6 @@ function PatientForm(props) {
   const emailInput = useInput(value => value.includes('@'));
   const addressInput = useInput(value => value.length > 4);
   const dateInput = useInput(value => value !== '');
-
-  const showFormHandler = () => {
-    dispatch(patientsActions.setIsAddTrue)
-    props.showFormHandler()
-  }
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -59,7 +55,7 @@ function PatientForm(props) {
   return (
     <Dialog open={props.showForm} onClose={props.showFormHandler} fullWidth>
       <Box component='form' className={classes.root} onSubmit={submitHandler}>
-        <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={showFormHandler}>
+        <IconButton className={classes.closeBtn} aria-label="delete" color='primary' onClick={props.showFormHandler}>
           <CloseOutlined/>
         </IconButton>
 
@@ -71,7 +67,7 @@ function PatientForm(props) {
           onChange = {nameInput.enterValueHandler}
           onBlur = {nameInput.blurHandler}
           value={isAdd ? nameInput.value : undefined}
-          defaultValue={!isAdd && patientToEdit.patientName}
+          defaultValue={!isAdd ? patientToEdit.patientName : undefined}
           error={nameInput.hasError}
           helperText={nameInput.hasError && 'Campo obrigatório'}
         />
@@ -84,7 +80,7 @@ function PatientForm(props) {
           onChange={emailInput.enterValueHandler}
           onBlur = {emailInput.blurHandler}
           value={isAdd ? emailInput.value : undefined}
-          defaultValue={!isAdd && patientToEdit.email}
+          defaultValue={!isAdd ? patientToEdit.email : undefined}
           error={emailInput.hasError}
           helperText={emailInput.hasError && 'Email inválido'}
         />
@@ -97,7 +93,7 @@ function PatientForm(props) {
           onChange={addressInput.enterValueHandler}
           onBlur = {addressInput.blurHandler}
           value={isAdd ? addressInput.value : undefined}
-          defaultValue={!isAdd && patientToEdit.address}
+          defaultValue={!isAdd ? patientToEdit.address : undefined}
           error={addressInput.hasError}
           helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
         />
@@ -111,7 +107,7 @@ function PatientForm(props) {
           onChange={dateInput.enterValueHandler}
           onBlur = {dateInput.blurHandler}
           value={isAdd ? dateInput.value : undefined}
-          defaultValue={!isAdd && patientToEdit.birthDay}
+          defaultValue={!isAdd ? patientToEdit.birthDay : undefined}
           error={dateInput.hasError}
           helperText={dateInput.hasError && 'Data inválida'}
         />
