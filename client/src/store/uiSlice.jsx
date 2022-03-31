@@ -7,6 +7,7 @@ const initialState = {
     show: false
   },
   isLoading: false,
+  isLoadingDelete: false,
   showForm: false
 };
 
@@ -37,6 +38,9 @@ export const uiSlice = createSlice({
     },
     setIsloading(state) {
       state.isLoading = !state.isLoading
+    },
+    setIsloadingDelete(state) {
+      state.isLoadingDelete = !state.isLoadingDelete
     }
   }
 });

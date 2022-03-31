@@ -22,6 +22,7 @@ function PatientTable(props) {
   const classes = usePatientTableStyles();
   const patientRows = useSelector((state) => state.patient.patientItems);
   const isLoading = useSelector((state) => state.ui.isLoading);
+  const isLoadingDelete = useSelector((state) => state.ui.isLoadingDelete);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -100,7 +101,7 @@ function PatientTable(props) {
                       color="secondary"
                       size="small"
                     >
-                      <Delete />
+                      {isLoadingDelete ? <CircularProgress size='24px' color='secondary'/> : <Delete />}
                     </IconButton>
                   </TableCell>
                 </TableRow>

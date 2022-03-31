@@ -47,6 +47,7 @@ export const editPatient = (editedPatient, id) => async (dispatch) => {
 };
 
 export const removePatient = (patientId) => async (dispatch) => {
+  dispatch(uiActions.setIsloadingDelete())
   try {
     await axios({
       method: 'DELETE',
@@ -56,5 +57,7 @@ export const removePatient = (patientId) => async (dispatch) => {
     dispatch(uiActions.setSuccess('Paciente removido com sucesso!'));
   } catch (error) {
     dispatch(uiActions.setError());
-  };
+  } finally {
+    dispatch(uiActions.setIsloadingDelete());
+  }
 };
