@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 
 export const useInput = (validatorFunc, defaultValue) => {
-  const [value, setValue] = useState('');
+  const initial = ''
+
+  const [value, setValue] = useState(initial);
   const [isTouched, setIsTouchedValue] = useState(false);
 
   
   useEffect(() => {
-    setValue(defaultValue || '')
+    setValue(defaultValue || initial)
   }, [defaultValue])
 
   const valueisValid = validatorFunc(value);
@@ -29,6 +31,7 @@ export const useInput = (validatorFunc, defaultValue) => {
     value,
     isTouched,
     hasError,
+    valueisValid,
     enterValueHandler,
     blurHandler,
     reset

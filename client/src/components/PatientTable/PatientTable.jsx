@@ -7,7 +7,9 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   Toolbar,
   Typography,
@@ -17,6 +19,7 @@ import { Delete, Edit, PersonAdd } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPatients, removePatient } from "../../store/thunk/patientThunk";
 import { uiActions } from "../../store/slice/uiSlice";
+import { format } from "date-fns";
 
 function PatientTable(props) {
   const classes = usePatientTableStyles();
@@ -75,7 +78,7 @@ function PatientTable(props) {
                   <TableCell>{row.patientName}</TableCell>
                   <TableCell>{row.email}</TableCell>
                   <TableCell>{row.address}</TableCell>
-                  <TableCell>{row.birthDay}</TableCell>
+                  <TableCell>{format(new Date(row.birthDay), 'dd/MM/yyyy') }</TableCell>
                   <TableCell>
                     <IconButton
                       size="small"
@@ -101,7 +104,7 @@ function PatientTable(props) {
                       color="secondary"
                       size="small"
                     >
-                      {isLoadingDelete ? <CircularProgress size='24px' color='secondary'/> : <Delete />}
+                      {(isLoadingDelete.status && isLoadingDelete.rowId === row.id) ? <CircularProgress size='24px' color='secondary'/> : <Delete />}
                     </IconButton>
                   </TableCell>
                 </TableRow>

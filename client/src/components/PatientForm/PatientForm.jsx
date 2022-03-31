@@ -67,7 +67,9 @@ function PatientForm(props) {
   const showFormHandler= () => {
     dispatch(uiActions.showFormHandler())
   }
-  
+
+  const formIsValid = nameInput.valueisValid && emailInput.valueisValid && addressInput.valueisValid && dateInput.valueisValid
+
   return (
     <Dialog open={showForm} onClose={showFormHandler} fullWidth>
       <Box component='form' className={classes.root} onSubmit={submitHandler}>
@@ -82,8 +84,7 @@ function PatientForm(props) {
           <CloseOutlined/>
         </IconButton>
 
-        <TextField 
-          required 
+        <TextField  
           type = 'text'
           id = 'patientName'
           label = 'Nome do Paciente'
@@ -95,8 +96,7 @@ function PatientForm(props) {
           helperText={nameInput.hasError && 'Campo obrigatório'}
         />
 
-        <TextField 
-          required 
+        <TextField  
           type = 'email'
           id = 'email'
           label = 'Email' 
@@ -108,8 +108,7 @@ function PatientForm(props) {
           helperText={emailInput.hasError && 'Email inválido'}
         />
 
-        <TextField 
-          required 
+        <TextField  
           type='text' 
           id='address' 
           label='Endereço' 
@@ -121,8 +120,7 @@ function PatientForm(props) {
           helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
         />
 
-        <TextField 
-          required 
+        <TextField  
           type='date' 
           id='date' 
           label='Data de Nascimento' 
@@ -136,8 +134,8 @@ function PatientForm(props) {
         />
         {
         !defaultPatientName ? 
-          <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button> : 
-          <Button type='submit' variant='contained' color='primary'>Editar Paciente</Button>
+          <Button type='submit' variant='contained' color='primary' disabled={!formIsValid}>Adicionar Paciente</Button> : 
+          <Button type='submit' variant='contained' color='primary' >Editar Paciente</Button>
         }
       </Box>
     </Dialog>

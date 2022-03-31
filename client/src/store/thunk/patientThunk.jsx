@@ -32,6 +32,7 @@ export const createPatient = (newPatient) => async (dispatch) => {
 };
 
 export const editPatient = (editedPatient, id) => async (dispatch) => {
+  dispatch(uiActions.showFormHandler());
   try {
     await axios({
       method: 'PATCH',
@@ -40,14 +41,13 @@ export const editPatient = (editedPatient, id) => async (dispatch) => {
     });
     dispatch(patientsActions.editPatient({...editedPatient, id}));
     dispatch(uiActions.setSuccess('Paciente editado com sucesso!'));
-    dispatch(uiActions.showFormHandler());
   } catch (error) {
     dispatch(uiActions.setError());
   };
 };
 
 export const removePatient = (patientId) => async (dispatch) => {
-  dispatch(uiActions.setIsloadingDelete())
+  dispatch(uiActions.setIsloadingDelete(patientId.id))
   try {
     await axios({
       method: 'DELETE',
