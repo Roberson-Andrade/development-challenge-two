@@ -1,27 +1,32 @@
-import { Container } from '@material-ui/core';
-import React, { useState } from 'react';
-import PatientForm from './components/PatientForm/PatientForm';
-import PatientTable from './components/PatientTable/PatientTable';
+import { Container, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import PatientForm from "./components/PatientForm/PatientForm";
+import PatientTable from "./components/PatientTable/PatientTable";
+import { uiActions } from "./store/uiSlice";
 
 function App() {
-  const [showForm, setShowForm] = useState(false);
+  const notification = useSelector((state) => state.ui.notification);
+  const dispatch = useDispatch();
   const [defaultValues, setDefaultValues] = useState({
-    defaultPatientName: '',
-    defaultEmail: '',
-    defaultAddress: '',
-    defaultBirthDay: '',
+    defaultPatientName: "",
+    defaultEmail: "",
+    defaultAddress: "",
+    defaultBirthDay: "",
   });
 
-  const showFormHandler = () => {
-    setShowForm((prevState => !prevState)) 
-  }
-
   return (
-    <Container maxWidth='xl'>
-      <PatientForm showFormHandler={showFormHandler} showForm={showForm} defaultValues={defaultValues}/>
-      <PatientTable showFormHandler={showFormHandler} setEditValues={setDefaultValues}/>
+    <Container maxWidth="xl">
+      <PatientForm defaultValues={defaultValues} />
+      <PatientTable setEditValues={setDefaultValues} />
+      <Snackbar open={notification.show} autoHideDuration={6000} onClose={() => { dispatch(uiActions.closeNotificaton()) }}>
+        <Alert onClose={() => { dispatch(uiActions.closeNotificaton()) }} severity={notification.status}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
-};
+}
 
 export default App;

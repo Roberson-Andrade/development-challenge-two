@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   IconButton,
   TextField
@@ -12,10 +13,13 @@ import { usePatientFormStyles } from './usePatientFormStyles';
 import { useInput } from '../../hooks/useInput';
 import { patientsActions } from '../../store/patientSlice';
 import { createPatient, editPatient } from '../../store/patientThunk';
+import { uiActions } from '../../store/uiSlice';
 
 
 function PatientForm(props) {
   const classes = usePatientFormStyles();
+  const isLoading = useSelector(state => state.ui.isLoading);
+  const showForm = useSelector(state => state.ui.showForm);
   const dispatch = useDispatch();
 
   const {
@@ -50,8 +54,6 @@ function PatientForm(props) {
       }
       
       dispatch(editPatient(editedPatient, id));
-      resetAllInputs()
-      props.showFormHandler()
       return;
     }
     
@@ -61,19 +63,21 @@ function PatientForm(props) {
       address: addressInput.value,
       birthDay: dateInput.value
     }))
-    resetAllInputs()
-    props.showFormHandler()
   };
+
+  const showFormHandler= () => {
+    dispatch(uiActions.showFormHandler())
+  }
   
   return (
-    <Dialog open={props.showForm} onClose={props.showFormHandler} fullWidth>
+    <Dialog open={showForm} onClose={showFormHandler} fullWidth>
       <Box component='form' className={classes.root} onSubmit={submitHandler}>
         <IconButton 
         className={classes.closeBtn} 
         aria-label="delete" 
         color='primary' 
         onClick={() => {
-          props.showFormHandler();
+          dispatch(uiActions.showFormHandler());
           resetAllInputs();
         }}>
           <CloseOutlined/>
@@ -131,7 +135,11 @@ function PatientForm(props) {
           error={dateInput.hasError}
           helperText={dateInput.hasError && 'Data inválida'}
         />
-        {!defaultPatientName ? <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button> : <Button type='submit' variant='contained' color='primary'>Editar Paciente</Button>}
+        {
+        !defaultPatientName ? 
+          <Button type='submit' variant='contained' color='primary'>Adicionar Paciente</Button> : 
+          <Button type='submit' variant='contained' color='primary'>Editar Paciente</Button>
+        }
       </Box>
     </Dialog>
   )

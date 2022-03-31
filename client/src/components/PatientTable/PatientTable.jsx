@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
+  CircularProgress,
   IconButton,
   Paper,
   Table,
@@ -9,35 +10,38 @@ import {
   TableHead,
   TableRow,
   Toolbar,
-  Typography
-} from '@material-ui/core';
-import { usePatientTableStyles } from './usePatientTableStyles';
-import { Delete, Edit, PersonAdd } from '@material-ui/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { patientsActions } from '../../store/patientSlice';
-import { fetchPatients, removePatient } from '../../store/patientThunk';
+  Typography,
+} from "@material-ui/core";
+import { usePatientTableStyles } from "./usePatientTableStyles";
+import { Delete, Edit, PersonAdd } from "@material-ui/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPatients, removePatient } from "../../store/patientThunk";
+import { uiActions } from "../../store/uiSlice";
 
 function PatientTable(props) {
   const classes = usePatientTableStyles();
-  const patientRows = useSelector(state => state.patient.patientItems)
-  const dispatch  = useDispatch();
+  const patientRows = useSelector((state) => state.patient.patientItems);
+  const isLoading = useSelector((state) => state.ui.isLoading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPatients())
-  }, [])
+    dispatch(fetchPatients());
+  }, []);
   const showFormHandler = () => {
-    props.setEditValues({})
-    props.showFormHandler()
-  }
+    props.setEditValues({});
+    dispatch(uiActions.showFormHandler())
+  };
 
   return (
     <Paper className={classes.paper}>
       <Toolbar className={classes.toolbar}>
-        <Typography variant='h5'>
-          Pacientes
-        </Typography>
-        <IconButton onClick={showFormHandler} variant='contained' color='primary'>
-            <PersonAdd/>
+        <Typography variant="h5">Pacientes</Typography>
+        <IconButton
+          onClick={showFormHandler}
+          variant="contained"
+          color="primary"
+        >
+          <PersonAdd />
         </IconButton>
       </Toolbar>
 
@@ -48,49 +52,75 @@ function PatientTable(props) {
               <TableCell>Nome</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Endereço</TableCell>
-              <TableCell >Data de Nascimento</TableCell>
+              <TableCell>Data de Nascimento</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {patientRows.length !== 0 ? patientRows.map(row => (
-              <TableRow hover key={row.id}>
-                <TableCell>{row.patientName}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.birthDay}</TableCell>
-                <TableCell>
-                  <IconButton 
-                    size='small' 
-                    color='primary' 
-                    onClick={() => { 
-                      props.setEditValues({ 
-                        id: row.id,
-                        defaultPatientName: row.patientName,
-                        defaultEmail: row.email,
-                        defaultAddress: row.address,
-                        defaultBirthDay: row.birthDay
-                      })
-                      props.showFormHandler();
-                    }}
-                  >
-                      <Edit />
-                  </IconButton>    
-
-                  <IconButton onClick={() => { dispatch(removePatient({ id: row.id })) } } color='secondary' size='small'>
-                    <Delete/>
-                  </IconButton>
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  className={classes.notFoundMsg}
+                  variant="footer"
+                  colSpan={5}
+                >
+                  <CircularProgress color="primary" />
                 </TableCell>
               </TableRow>
-            )) : <TableRow><TableCell className={classes.notFoundMsg} variant='footer' colSpan={5}>Nenhum paciente registrado</TableCell></TableRow>}
+            ) : patientRows.length !== 0 ? (
+              patientRows.map((row) => (
+                <TableRow hover key={row.id}>
+                  <TableCell>{row.patientName}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.address}</TableCell>
+                  <TableCell>{row.birthDay}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        props.setEditValues({
+                          id: row.id,
+                          defaultPatientName: row.patientName,
+                          defaultEmail: row.email,
+                          defaultAddress: row.address,
+                          defaultBirthDay: row.birthDay,
+                        });
+                        dispatch(uiActions.showFormHandler())
+                      }}
+                    >
+                      <Edit />
+                    </IconButton>
+
+                    <IconButton
+                      onClick={() => {
+                        dispatch(removePatient({ id: row.id }));
+                      }}
+                      color="secondary"
+                      size="small"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  className={classes.notFoundMsg}
+                  variant="footer"
+                  colSpan={5}
+                >
+                  Nenhum paciente registrado
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
     </Paper>
-
-
   );
-};
+}
 
-export default PatientTable
+export default PatientTable;
