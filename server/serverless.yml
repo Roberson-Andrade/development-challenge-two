@@ -31,31 +31,35 @@ functions:
       - http: 
           path: patients
           method: post
+          cors: true
   list:
     handler: endpoints/list.list
     events:
       - http:
           path: patients
           method: get
+          cors: true
   getOne:
     handler: endpoints/getOne.getOne
     events:
       - http:
           path: patients/{id}
           method: get
+          cors: true
   patch:
     handler: endpoints/update.update
     events:
       - http:
           path: patients/{id}
           method: patch
-
+          cors: true
   delete:
     handler: endpoints/delete.delete
     events:
       - http: 
           path: patients/{id}
           method: delete
+          cors: true
   
 resources:
   Resources:

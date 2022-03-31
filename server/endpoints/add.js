@@ -28,7 +28,7 @@ module.exports.add = async (event) => {
 
   try {
     await dynamoDB.put(params).promise();
-    return response({ message: 'Patient registry record created!' }, 201);
+    return response(params.Item, 201);
   } catch (error) {
     return response(error, 500);
   };
