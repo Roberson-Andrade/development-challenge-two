@@ -11,13 +11,15 @@ module.exports.update = async (event) => {
     return response({ error: 'Insert only valid fields' }, 400);
   };
 
-  let updateExpression = 'set ';
+  let updateExpression = 'set';
   let expressionAttributeValues = {};
 
   for(const field in body) {
-    updateExpression += ` ${field} = :${field}`;
+    updateExpression += ` ${field} = :${field} ,`;
     expressionAttributeValues[':' + field] = body[field];
   };
+
+  updateExpression= updateExpression.slice(0, -1);
 
   const params = {
     TableName: 'PatientTable',
