@@ -90,8 +90,7 @@ function PatientForm(props) {
           label = 'Nome do Paciente'
           onChange = {nameInput.enterValueHandler}
           onBlur = {nameInput.blurHandler}
-          value={!defaultPatientName ? nameInput.value : undefined}
-          defaultValue={defaultPatientName ? defaultPatientName : undefined}
+          value={nameInput.value}
           error={nameInput.hasError}
           helperText={nameInput.hasError && 'Campo obrigatório'}
         />
@@ -102,8 +101,7 @@ function PatientForm(props) {
           label = 'Email' 
           onChange={emailInput.enterValueHandler}
           onBlur = {emailInput.blurHandler}
-          value={!defaultPatientName ? emailInput.value : undefined}
-          defaultValue={defaultPatientName ? defaultEmail : undefined}
+          value={emailInput.value}
           error={emailInput.hasError}
           helperText={emailInput.hasError && 'Email inválido'}
         />
@@ -114,8 +112,7 @@ function PatientForm(props) {
           label='Endereço' 
           onChange={addressInput.enterValueHandler}
           onBlur = {addressInput.blurHandler}
-          value={!defaultPatientName ? addressInput.value : undefined}
-          defaultValue={defaultPatientName ? defaultAddress : undefined}
+          value={addressInput.value}
           error={addressInput.hasError}
           helperText={addressInput.hasError && 'insira 4 caracteres ou mais'}
         />
@@ -127,8 +124,7 @@ function PatientForm(props) {
           InputLabelProps={{ shrink: true }}
           onChange={dateInput.enterValueHandler}
           onBlur = {dateInput.blurHandler}
-          value={!defaultPatientName ? dateInput.value : undefined}
-          defaultValue={defaultPatientName ? defaultBirthDay : undefined}
+          value={dateInput.value}
           error={dateInput.hasError}
           helperText={dateInput.hasError && 'Data inválida'}
         />
