@@ -11,6 +11,7 @@ import { CloseOutlined } from '@material-ui/icons';
 import { usePatientFormStyles } from './usePatientFormStyles';
 import { useInput } from '../../hooks/useInput';
 import { patientsActions } from '../../store/patientSlice';
+import { createPatient, editPatient } from '../../store/patientThunk';
 
 
 function PatientForm(props) {
@@ -41,19 +42,20 @@ function PatientForm(props) {
     event.preventDefault();
 
     if(defaultPatientName) {
-      dispatch(patientsActions.editPatient({
-        id,
+      const editedPatient = {
         patientName: nameInput.value || defaultPatientName,
         email: emailInput.value || defaultEmail,
         address: addressInput.value || defaultAddress,
         birthDay: dateInput.value || defaultBirthDay
-      }));
+      }
+      
+      dispatch(editPatient(editedPatient, id));
       resetAllInputs()
       props.showFormHandler()
       return;
     }
-
-    dispatch(patientsActions.addPatient({
+    
+    dispatch(createPatient({
       patientName: nameInput.value,
       email: emailInput.value,
       address: addressInput.value,

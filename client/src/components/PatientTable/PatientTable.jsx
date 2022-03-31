@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   IconButton,
   Paper,
@@ -15,13 +15,16 @@ import { usePatientTableStyles } from './usePatientTableStyles';
 import { Delete, Edit, PersonAdd } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { patientsActions } from '../../store/patientSlice';
+import { fetchPatients, removePatient } from '../../store/patientThunk';
 
 function PatientTable(props) {
   const classes = usePatientTableStyles();
   const patientRows = useSelector(state => state.patient.patientItems)
   const dispatch  = useDispatch();
 
-  
+  useEffect(() => {
+    dispatch(fetchPatients())
+  }, [])
   const showFormHandler = () => {
     props.setEditValues({})
     props.showFormHandler()
@@ -75,7 +78,7 @@ function PatientTable(props) {
                       <Edit />
                   </IconButton>    
 
-                  <IconButton onClick={() => { dispatch(patientsActions.removePatient({ id: row.id })) } } color='secondary' size='small'>
+                  <IconButton onClick={() => { dispatch(removePatient({ id: row.id })) } } color='secondary' size='small'>
                     <Delete/>
                   </IconButton>
                 </TableCell>

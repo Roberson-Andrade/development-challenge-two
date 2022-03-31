@@ -11,7 +11,7 @@ export const useInput = (validatorFunc, defaultValue) => {
 
   const valueisValid = validatorFunc(value);
   const hasError = !valueisValid && isTouched;
-  console.log(value)
+
   const enterValueHandler = (event) => {
     setValue(event.target.value);
   };
