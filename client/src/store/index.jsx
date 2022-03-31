@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { patientSlice } from "./patientSlice";
-import { uiSlice } from "./uiSlice";
+import { patientSlice } from "./slice/patientSlice";
+import { uiSlice } from "./slice/uiSlice";
 
 export const store = configureStore({
   reducer: {

@@ -15,8 +15,8 @@ import {
 import { usePatientTableStyles } from "./usePatientTableStyles";
 import { Delete, Edit, PersonAdd } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPatients, removePatient } from "../../store/patientThunk";
-import { uiActions } from "../../store/uiSlice";
+import { fetchPatients, removePatient } from "../../store/thunk/patientThunk";
+import { uiActions } from "../../store/slice/uiSlice";
 
 function PatientTable(props) {
   const classes = usePatientTableStyles();

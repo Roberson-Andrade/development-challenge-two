@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { patientsActions } from './patientSlice';
-import { uiActions } from './uiSlice';
+import { patientsActions } from '../slice/patientSlice';
+import { uiActions } from '../slice/uiSlice';
 const url = 'https://q7gsh3t08h.execute-api.sa-east-1.amazonaws.com/dev/patients';
 
 export const fetchPatients = () => async (dispatch) => {

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Button,
-  CircularProgress,
   Dialog,
   IconButton,
   TextField
@@ -11,14 +10,12 @@ import {
 import { CloseOutlined } from '@material-ui/icons';
 import { usePatientFormStyles } from './usePatientFormStyles';
 import { useInput } from '../../hooks/useInput';
-import { patientsActions } from '../../store/patientSlice';
-import { createPatient, editPatient } from '../../store/patientThunk';
-import { uiActions } from '../../store/uiSlice';
+import { createPatient, editPatient } from '../../store/thunk/patientThunk';
+import { uiActions } from '../../store/slice/uiSlice';
 
 
 function PatientForm(props) {
   const classes = usePatientFormStyles();
-  const isLoading = useSelector(state => state.ui.isLoading);
   const showForm = useSelector(state => state.ui.showForm);
   const dispatch = useDispatch();
 
@@ -54,6 +51,7 @@ function PatientForm(props) {
       }
       
       dispatch(editPatient(editedPatient, id));
+      resetAllInputs()
       return;
     }
     
@@ -63,6 +61,7 @@ function PatientForm(props) {
       address: addressInput.value,
       birthDay: dateInput.value
     }))
+    resetAllInputs()
   };
 
   const showFormHandler= () => {
