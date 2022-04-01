@@ -1,17 +1,23 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { patientsActions } from '../slice/patientSlice';
 import { uiActions } from '../slice/uiSlice';
 const url = 'https://mwyx3m6fvb.execute-api.sa-east-1.amazonaws.com/dev/patients';
 
-export const fetchPatients = () => async (dispatch) => {
-  dispatch(uiActions.setIsloading());
-
+export const fetchPatients = (lastEvaluatedKey) => async (dispatch) => {
+  dispatch(uiActions.setIsloading()); 
   try {
-    const { data } = await axios.get(url);
-    dispatch(patientsActions.replacePatients(data.Items));
-    dispatch(uiActions.setIsloading());
+    const { data } = await axios({
+      method: 'GET',
+      url: `${url}/?limit=5&lastEvaluatedKey=${lastEvaluatedKey}`
+    });
+
+    dispatch(patientsActions.replacePatients({ data, lastEvaluatedKey: data.LastEvaluatedKey?.id ? data.LastEvaluatedKey.id : null }));
   } catch (error) {
+    console.log(error)
     dispatch(uiActions.setError());
+  } finally {
+    dispatch(uiActions.setIsloading());
   };
 };
 
