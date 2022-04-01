@@ -16,8 +16,5 @@ export const usePatientTableStyles = makeStyles({
   notFoundMsg: {
     textAlign: 'center',
     fontSize: '17px'
-  },
-  table: {
-    minHeight: '425px'
   }
 });

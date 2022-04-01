@@ -66,7 +66,7 @@ function PatientTable(props) {
       </Toolbar>
 
       <TableContainer>
-        <Table className={classes.table}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
