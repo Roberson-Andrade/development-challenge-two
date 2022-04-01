@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CircularProgress,
   IconButton,
@@ -28,9 +28,21 @@ function PatientTable(props) {
   const isLoadingDelete = useSelector((state) => state.ui.isLoadingDelete);
   const dispatch = useDispatch();
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const pageChangeHandler = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const rowsPerPageHandler = (event) => {
+    setRowsPerPage(event.target.value)
+    setPage(0)
+  }
+
   useEffect(() => {
     dispatch(fetchPatients());
-  }, []);
+  }, [fetchPatients]);
   const showFormHandler = () => {
     props.setEditValues({});
     dispatch(uiActions.showFormHandler())
@@ -73,7 +85,7 @@ function PatientTable(props) {
                 </TableCell>
               </TableRow>
             ) : patientRows.length !== 0 ? (
-              patientRows.map((row) => (
+              patientRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow hover key={row.id}>
                   <TableCell>{row.patientName}</TableCell>
                   <TableCell>{row.email}</TableCell>
@@ -121,6 +133,18 @@ function PatientTable(props) {
               </TableRow>
             )}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                count={patientRows.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={[5]}
+                onPageChange={pageChangeHandler}
+                onRowsPerPageChange={rowsPerPageHandler}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </Paper>
