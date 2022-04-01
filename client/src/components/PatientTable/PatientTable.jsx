@@ -16,58 +16,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import { usePatientTableStyles } from "./usePatientTableStyles";
-import { Delete, Edit, KeyboardArrowLeft, KeyboardArrowRight, PersonAdd } from "@material-ui/icons";
+import { Delete, Edit, PersonAdd } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPatients, removePatient } from "../../store/thunk/patientThunk";
 import { uiActions } from "../../store/slice/uiSlice";
 import { format } from "date-fns";
-
-
-
-function TablePaginationActions(props) {
-  const { count, page, rowsPerPage, onPageChange } = props;
-  const lastEvaluatedKey = useSelector(state => state.patient.lastEvaluatedKey)
-  const dispatch = useDispatch();
-
-  const handleBackButtonClick = (event) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event) => {
-    if(lastEvaluatedKey) {
-      dispatch(fetchPatients(lastEvaluatedKey))
-    }
-
-    onPageChange(event, page + 1);
-  };
-
-  return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        <KeyboardArrowLeft />
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={!lastEvaluatedKey && page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        <KeyboardArrowRight />
-      </IconButton>
-    </Box>
-  );
-}
-
-
-
-
-
-
-
-
+import { TablePaginationActions } from "./TablePaginationActions";
 
 function PatientTable(props) {
   const classes = usePatientTableStyles();
@@ -111,8 +65,8 @@ function PatientTable(props) {
         </IconButton>
       </Toolbar>
 
-      <TableContainer className={classes.table}>
-        <Table>
+      <TableContainer>
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>

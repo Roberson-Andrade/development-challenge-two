@@ -14,7 +14,6 @@ export const fetchPatients = (lastEvaluatedKey) => async (dispatch) => {
 
     dispatch(patientsActions.replacePatients({ data, lastEvaluatedKey: data.LastEvaluatedKey?.id ? data.LastEvaluatedKey.id : null }));
   } catch (error) {
-    console.log(error)
     dispatch(uiActions.setError());
   } finally {
     dispatch(uiActions.setIsloading());
